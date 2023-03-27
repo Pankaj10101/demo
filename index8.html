@@ -30,31 +30,51 @@
         function onSubmit(e){
             e.preventDefault();
             let ele = document.createElement('li')
-            let text = name.value + " " +email.value+ " "+phone.value;
+            let text = JSON.stringify({
+                name : name.value,
+                email : email.value,
+                phone: phone.value
+            })
             var id = 'id' + Math.random().toString(16).slice(2)
             localStorage.setItem(id, text)
             ele.setAttribute('id', id)
-            ele.innerHTML = `${text} <button class='btn-delete' data-id="${id}" >Delete</button>`
+            ele.innerHTML = `${JSON.parse(text).name +" "+JSON.parse(text).email +" "+JSON.parse(text).phone } <button class='btn-delete' data-id="${id}" >Delete</button> 
+            <button class='btn-edit' data-id="${id}" >Edit</button>`
             list.append(ele)
             name.value = ''
             email.value = ''
             phone.value=''
 
             ele.querySelector('.btn-delete').addEventListener('click', deleteItem)
+            ele.querySelector('.btn-edit').addEventListener('click', edit)
         }
 
-        function deleteItem(e){
-            localStorage.removeItem(e.target.dataset.id)
-            e.target.parentElement.remove()
-        }
         for(let i=0; i<localStorage.length; i++){
             const key = localStorage.key(i)
             let val = localStorage.getItem(key)
             let ele = document.createElement('li')
             ele.setAttribute('id', key)
-            ele.innerHTML = `${val} <button class='btn-delete' data-id="${key}" >Delete</button>`
+            ele.innerHTML = `${JSON.parse(val).name +" "+JSON.parse(val).email +" "+JSON.parse(val).phone} <button class='btn-delete' data-id="${key}" >Delete</button> 
+            <button class='btn-edit' data-id="${key}" >Edit</button>`
             list.append(ele)
             ele.querySelector('.btn-delete').addEventListener('click', deleteItem)
+            ele.querySelector('.btn-edit').addEventListener('click', edit)
+
+        }
+
+        
+        function deleteItem(e){
+            localStorage.removeItem(e.target.dataset.id)
+            e.target.parentElement.remove()
+        }
+
+        function edit(e){
+            let val = localStorage.getItem(e.target.dataset.id)
+            name.value = JSON.parse(val).name
+            email.value =JSON.parse(val).email
+            phone.value=JSON.parse(val).phone
+            localStorage.removeItem(e.target.dataset.id)
+            e.target.parentElement.remove()
 
         }
     </script>
