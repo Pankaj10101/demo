@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <form class="my-form">
+            <input type="text" name="name" id="name" placeholder="Enter Name">
+            <input type="email" name="email" id="email" placeholder="Enter Email">
+            <input type="text" name="phone" id="phone" placeholder="Enter Phone No.">
+            <input type="submit" value="Submit" class="btn">
+        </form>
+
+        <ul class="list">
+
+        </ul>
+    </div>
+
+    <script>
+        const name = document.getElementById('name')
+        const email = document.getElementById('email')
+        const phone = document.getElementById('phone')
+        const form = document.querySelector('.my-form')
+        const list = document.querySelector('.list')
+        form.addEventListener('submit', onSubmit)
+
+        function onSubmit(e){
+            e.preventDefault();
+            let ele = document.createElement('li')
+            let text = name.value + " " +email.value+ " "+phone.value
+            ele.append(text)
+            var id = "id" + Math.random().toString(16).slice(2)
+            localStorage.setItem(id, text)
+            list.append(localStorage.getItem(id))
+            name.value = ''
+            email.value = ''
+            phone.value=''
+        }
+        for(let i=0; i<localStorage.length; i++){
+            const key = localStorage.key(i)
+            let val = localStorage.getItem(key)
+            let ele = document.createElement('li')
+            ele.append(val)
+            list.append(ele)
+        }
+    </script>
+</body>
+</html>
