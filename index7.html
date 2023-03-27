@@ -132,8 +132,9 @@ function onSubmit(e) {
     setTimeout(() => msg.remove(), 3000);
   } else {
     const li = document.createElement('li');
-    localStorage.setItem(`${nameInput.value}`, `${nameInput.value}: ${emailInput.value}`)
-    li.appendChild(document.createTextNode(localStorage.getItem(nameInput.value)));
+    var id = "id" + Math.random().toString(16).slice(2)
+    localStorage.setItem(id, `${nameInput.value}: ${emailInput.value}`)
+    li.appendChild(document.createTextNode(localStorage.getItem(id)));
 
     userList.appendChild(li);
     nameInput.value = '';
