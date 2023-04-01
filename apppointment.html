@@ -36,7 +36,9 @@
                 email : email.value,
                 phone: phone.value
             }
-            // ele.setAttribute('id', id)
+
+
+
             axios.post("https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data", text )
             .then((res)=>{
                 ele.innerHTML = `${res.data.name +" "+res.data.email +" "+ res.data.phone } <button class='btn-delete' data-id="${res.data._id}" >Delete</button> 
@@ -50,16 +52,14 @@
             name.value = ""
             email.value =""
             phone.value=""
-
-
         }
-        let data = axios.get("https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data")
+
+        window.addEventListener("DOMContentLoaded", ()=>{
+            axios.get("https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data")
         .then((res)=>{
             let size = res.data.length
-            console.log(res.data)
             for(let i=0; i<=size; i++){
                 const id = res.data[i]._id
-                console.log(res.data[i])
                 let ele = document.createElement('li')
                 ele.innerHTML = `${res.data[i].name +" "+res.data[i].email +" "+ res.data[i].phone } <button class='btn-delete' data-id="${id}" >Delete</button> 
             <button class='btn-edit' data-id="${id}" >Edit</button>`
@@ -74,6 +74,8 @@
         })
        
 
+} )
+
         
         function deleteItem(e){
             const id = e.target.dataset.id
@@ -85,8 +87,6 @@
             const id = e.target.dataset.id
             axios.get(`https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data/${id}`)
             .then((res)=>{
-                console.log(res)
-                console.log(res.data)
             name.value = res.data.name
             email.value =res.data.email
             phone.value=res.data.phone
