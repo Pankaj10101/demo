@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head> 
+<body>
+    <div class="container">
+        <form class="my-form">
+            <input type="text" name="name" id="name" placeholder="Enter Name">
+            <input type="email" name="email" id="email" placeholder="Enter Email">
+            <input type="text" name="phone" id="phone" placeholder="Enter Phone No.">
+            <input type="submit" value="Submit" class="btn">
+        </form>
+
+        <ul class="list">
+        </ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+
+    <script>
+        const name = document.getElementById('name')
+        const email = document.getElementById('email')
+        const phone = document.getElementById('phone')
+        const form = document.querySelector('.my-form')
+        const list = document.querySelector('.list')
+        form.addEventListener('submit', onSubmit)
+        
+        function onSubmit(e){
+            e.preventDefault();
+            let ele = document.createElement('li')
+            let text = {
+                name : name.value,
+                email : email.value,
+                phone: phone.value
+            }
+            // ele.setAttribute('id', id)
+            axios.post("https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data", text )
+            .then((res)=>{
+                ele.innerHTML = `${res.data.name +" "+res.data.email +" "+ res.data.phone } <button class='btn-delete' data-id="${res.data._id}" >Delete</button> 
+            <button class='btn-edit' data-id="${res.data._id}" >Edit</button>`
+            list.append(ele)
+            ele.querySelector('.btn-delete').addEventListener('click', deleteItem)
+            ele.querySelector('.btn-edit').addEventListener('click', edit)
+            }).catch((err)=>{
+                console.log(err)
+            })
+            name.value = ""
+            email.value =""
+            phone.value=""
+
+
+        }
+        let data = axios.get("https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data")
+        .then((res)=>{
+            let size = res.data.length
+            console.log(res.data)
+            for(let i=0; i<=size; i++){
+                const id = res.data[i]._id
+                console.log(res.data[i])
+                let ele = document.createElement('li')
+                ele.innerHTML = `${res.data[i].name +" "+res.data[i].email +" "+ res.data[i].phone } <button class='btn-delete' data-id="${id}" >Delete</button> 
+            <button class='btn-edit' data-id="${id}" >Edit</button>`
+            list.append(ele)
+            ele.querySelector('.btn-delete').addEventListener('click', deleteItem)
+            ele.querySelector('.btn-edit').addEventListener('click', edit)
+
+        }
+
+        }).catch((err)=>{
+            console.log(err)
+        })
+       
+
+        
+        function deleteItem(e){
+            const id = e.target.dataset.id
+           axios.delete(`https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data/${id}`)    
+            e.target.parentElement.remove()
+        }
+
+        function edit(e){
+            const id = e.target.dataset.id
+            axios.get(`https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data/${id}`)
+            .then((res)=>{
+                console.log(res)
+                console.log(res.data)
+            name.value = res.data.name
+            email.value =res.data.email
+            phone.value=res.data.phone
+            })
+            axios.delete(`https://crudcrud.com/api/ad7a839b58f6411c831434719e9d4f56/data/${id}`)  
+            e.target.parentElement.remove()
+        }
+        
+    </script>
+</body>
+</html>
